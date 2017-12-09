@@ -10,7 +10,7 @@ defmodule CliTest do
   end
 
   test "three values returned if three given" do
-    assert parse_args(["user", "project", "99"]) === {"user", "project", 99}
+    assert parse_args(["elixir-lang", "elixir", "3"]) === {"elixir-lang", "elixir", 3}
   end
 
   test "sort ascending orders the correct way" do

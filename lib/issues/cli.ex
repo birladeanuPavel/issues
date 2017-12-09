@@ -1,4 +1,6 @@
 defmodule Issues.CLI do
+  import Issues.TableForamtter, only: [ print_table_for_columns: 2 ]
+
   @default_count 4
 
   @moduledoc """
@@ -7,7 +9,7 @@ defmodule Issues.CLI do
   table of the last _n_ issues in a github project
   """
 
-  def run(argv) do
+  def main(argv) do
     argv
     |> parse_args
     |> _process
@@ -41,6 +43,7 @@ defmodule Issues.CLI do
     |> _decode_response
     |> sort_ascending
     |> Enum.take(count)
+    |> print_table_for_columns(["number", "created_at", "title"])
   end
 
   defp _decode_response({:ok, body}), do: body
