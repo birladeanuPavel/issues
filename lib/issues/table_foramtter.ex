@@ -1,4 +1,4 @@
-defmodule Issues.TableForamtter do
+defmodule Issues.TableFormatter do
 
   import Enum, only: [each: 2, map: 2, map_join: 3, max: 1]
 
@@ -13,6 +13,19 @@ defmodule Issues.TableForamtter do
     end
   end
 
+  @doc """
+  Given a list of rows, where each row contains a keyed list
+  of columns, return a list containing lists of the data in
+  each column. The `headers` parameter contains the
+  list of columns to extract
+  ## Example
+
+    iex> list = [Enum.into([{"a", "1"},{"b", "2"},{"c", "3"}], %{}),
+    ...>          Enum.into([{"a", "4"},{"b", "5"},{"c", "6"}], %{})]
+    iex> Issues.TableFormatter.split_into_columns(list, [ "a", "b", "c" ])
+    [ ["1", "4"], ["2", "5"], ["3", "6"] ]
+
+  """
   def split_into_columns(rows, headers) do
     for header <- headers  do
       for row <- rows,  do: printable(row[header])
@@ -22,6 +35,15 @@ defmodule Issues.TableForamtter do
   def printable(data) when is_binary(data), do: data
   def printable(data), do: to_string(data)
 
+  @doc """
+  Given a list containing sublists, where each sublist contains the data for
+  a column, return a list containing the maximum width of each column
+
+  ## Example
+    iex> columns = [["first", "second", "third"], ["a", "ab"]]
+    iex> Issues.TableFormatter.widths_of columns
+    [6, 2]
+  """
   def widths_of(columns) do
     for column <- columns, do: column |> map(&String.length/1) |> max
   end
